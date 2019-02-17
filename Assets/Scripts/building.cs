@@ -19,7 +19,10 @@ public class Building : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Rigidbody rb = collision.rigidbody;
+        if (rb == null) return;
         Missile attacker = rb.GetComponent<Missile>();
+        if (attacker == null) return;
+
         if (rb != null && attacker != null)
         {
             Debug.Log("Hit by " + collision.gameObject);
