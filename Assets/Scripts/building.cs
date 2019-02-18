@@ -6,6 +6,7 @@ public class Building : MonoBehaviour
 {
     public GameObject obj;
     public GameManager manager;
+    public AudioSource explosion;
     // Start is called before the first frame update
     void Start()
     {

@@ -50,6 +50,7 @@ MonoBehaviour:
   gm: {fileID: 0}
   obj: {fileID: 0}
   lifeTime: 10
+  explosion: {fileID: 0}
 --- !u!54 &1374809260452420496
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public Building buildingPrefab;
     public TextMesh text;
     public Transform boundsCollider;
+    public AudioSource missileFireNoise;
+    public AudioSource gameOverSound;
 
     private int activeMissileCount;
     private int currentLevel;
@@ -70,6 +72,7 @@ public class GameManager : MonoBehaviour
 
             if (gameEnd)
             {
+                
                 currentLevel = 1;
                 text.text = "Game Over. Level " + currentLevel + " starting in " + time + " seconds";
             }
@@ -110,6 +113,7 @@ public class GameManager : MonoBehaviour
 
     public void gameOver(Building b)
     {
+        gameOverSound.Play();
         Debug.Log("Destroying");
         if (buildingCount > 0)
         {
@@ -151,6 +155,7 @@ public class GameManager : MonoBehaviour
             if (isActiveLevel)
             {
                 Missile m = spawnMissile();
+                missileFireNoise.Play();
                 activeMissileCount++;
                 totalMissileCount++;
                 if (target != null)

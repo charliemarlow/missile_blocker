@@ -9,10 +9,14 @@ public class Gun : MonoBehaviour
     public OVRGrabber left;
     public OVRGrabber right;
     public Transform gunBarrel;
+    public AudioSource gunshot;
+    public LineRenderer laserLine;
+
     // Start is called before the first frame update
     void Start()
     {
         lastFire = Time.time;
+        laserLine = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -42,7 +46,9 @@ public class Gun : MonoBehaviour
 
     void fire()
     {
+        laserLine.enabled = true;
         Debug.Log("Pew!");
+        gunshot.Play();
         RaycastHit hit;
         Vector3 forward = gunBarrel.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(gunBarrel.position, forward, Color.green);
@@ -50,7 +56,6 @@ public class Gun : MonoBehaviour
             Debug.Log("You hit: " + hit.collider.gameObject.name);
             if (hit.collider.gameObject.CompareTag("Missile"))
             {
-                
                 Destroy(hit.collider.gameObject);
             }
         }
@@ -58,6 +63,7 @@ public class Gun : MonoBehaviour
         {
             Debug.Log("no hit");
         }
+        laserLine.enabled = false;
     } 
 
     float getIndexTriggerState(bool isLeft)
