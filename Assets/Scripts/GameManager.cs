@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public Missile missilePrefab;
     public Building buildingPrefab;
     public TextMesh text;
+    public Transform boundsCollider;
 
     private int activeMissileCount;
     private int currentLevel;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     private float timer;
     private bool gameEnd;
     private int buildingCount;
+    //private Bounds gameBound;
 
 
     // Start is called before the first frame update
@@ -41,7 +43,9 @@ public class GameManager : MonoBehaviour
         missileSpawnerActive = true;
         missilesToNextLevel = missilesPerRound * currentLevel;
         gameEnd = false;
-        buildingCount = 1;
+        buildingCount = 0;
+        //gameBound = new Bounds();
+        //gameBound.Encapsulate(boundsCollider.transform.position);
     }
 
     // Update is called once per frame
@@ -77,6 +81,14 @@ public class GameManager : MonoBehaviour
             
             if(timer <= 0.0f)
             {
+                if (buildingCount == 0)
+                {
+                    Debug.Log("Instantiating");
+                    Building newBuilding = Instantiate<Building>(buildingPrefab);
+                    buildingCount++;
+                    Debug.Log("B count after instantiation "+ buildingCount);
+                    target = newBuilding.transform;
+                }
                 isActiveLevel = true;
                 totalMissileCount = 0;
                 missilesToNextLevel = missilesPerRound * currentLevel;
@@ -96,19 +108,25 @@ public class GameManager : MonoBehaviour
         deadMissiles++;
     }
 
-    public void gameOver()
+    public void gameOver(Building b)
     {
-        buildingCount--;
+        Debug.Log("Destroying");
+        if (buildingCount > 0)
+        {
+            buildingCount--;
+        }
         isActiveLevel = false;
         timer = 6.0f;
         gameEnd = true;
-        Debug.Log("B count: " + buildingCount);
-        if (buildingCount == 0)
+        Debug.Log("B count in gameover: " + buildingCount);
+       /* if (buildingCount == 0)
         {
-            Building b = Instantiate<Building>(buildingPrefab);
+            Debug.Log("Instantiating");
+            Building newBuilding = Instantiate<Building>(buildingPrefab);
             buildingCount++;
             target = b.transform;
         }
+        */
 
     }
 
@@ -148,23 +166,38 @@ public class GameManager : MonoBehaviour
 
     void targetMissile(Missile m)
     {
-        /*
+        
         Rigidbody rb = m.GetComponent<Rigidbody>();
+        /*
         m.transform.LookAt(target.position);
         m.transform.Translate(Vector3.forward * missileSpeed * Time.deltaTime);
+
+        */
         rb.velocity = (target.position - m.transform.position).normalized * missileSpeed;
+
+
+        Vector3 targetDir = target.position - m.transform.position;
+
+        // The step size is equal to speed times frame time.
+        float step = missileSpeed * Time.deltaTime;
+
+        Vector3 newDir = Vector3.RotateTowards(m.transform.right, targetDir, step, 0.0f);
+        // Move our position a step closer to the target.
+        //m.transform.rotation = Quaternion.LookRotation(newDir);
+        /*
         Vector3 targetDir = target.position - rb.transform.position;
         float step = missileSpeed * Time.deltaTime;
         Vector3 newDir = Vector3.RotateTowards(rb.transform.forward, targetDir, step, 0.0f);
         rb.transform.rotation = Quaternion.LookRotation(newDir);
         rb.transform.position = Vector3.MoveTowards(rb.transform.position, rb.position, step);
-        */
+        
         Rigidbody rb = m.GetComponent<Rigidbody>();
         Vector3 direction = (target.position - rb.transform.position).normalized;
         Vector3 vel = direction * missileSpeed;
 
         Vector3 force = vel - rb.velocity;
         rb.velocity = force;
+        */
 
     }
 

@@ -29,7 +29,7 @@ public class Building : MonoBehaviour
         if (rb != null && attacker != null)
         {
             Destroy(this.gameObject);
-            manager.gameOver();
+            manager.gameOver(this);
 
         }
         // handle missile is null

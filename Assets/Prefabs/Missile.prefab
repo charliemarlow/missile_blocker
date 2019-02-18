@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1374809260452420496}
   m_Layer: 0
   m_Name: Missile
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,15 +25,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1374809260452420498}
-  m_LocalRotation: {x: 0.9999943, y: -0, z: -0, w: 0.0033846817}
-  m_LocalPosition: {x: 0.729, y: 4.82, z: 0.02}
-  m_LocalScale: {x: 1, y: 0.35204053, z: 0.55052}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
+  m_LocalPosition: {x: 0.729, y: 4.8232245, z: 0.03512416}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 2119458622395901285}
   - {fileID: 7769008549693047234}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 179.612, y: -0.000015258789, z: -0.000015258789}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!114 &4212075245082740080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 0}
+  obj: {fileID: 0}
   lifeTime: 10
 --- !u!54 &1374809260452420496
 Rigidbody:
@@ -79,7 +80,7 @@ GameObject:
   - component: {fileID: 6302168223278379697}
   m_Layer: 0
   m_Name: Cone
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -525,7 +526,7 @@ GameObject:
   - component: {fileID: 1802316455029466939}
   m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Missile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -8,8 +8,12 @@ public class Gun : MonoBehaviour
     private float lastFire;
     public OVRGrabber left;
     public OVRGrabber right;
+    public Transform gunBarrel;
     // Start is called before the first frame update
-    void Start() => lastFire = Time.time;
+    void Start()
+    {
+        lastFire = Time.time;
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -27,9 +31,33 @@ public class Gun : MonoBehaviour
         }
     }
 
+    /*
+     * // Frame update example: Draws a 10 meter long green line from the position for 1 frame.
+    void Update()
+    {
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(transform.position, forward, Color.green);
+    }
+     */
+
     void fire()
     {
         Debug.Log("Pew!");
+        RaycastHit hit;
+        Vector3 forward = gunBarrel.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(gunBarrel.position, forward, Color.green);
+        if (Physics.Raycast(gunBarrel.position, gunBarrel.forward, out hit)){
+            Debug.Log(hit.collider.gameObject.name);
+            if (hit.collider.gameObject.CompareTag("Missile"))
+            {
+                
+                Destroy(hit.collider.gameObject);
+            }
+        }
+        else
+        {
+            Debug.Log("no hit");
+        }
     } 
 
     float getIndexTriggerState(bool isLeft)
