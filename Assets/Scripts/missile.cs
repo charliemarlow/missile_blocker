@@ -9,6 +9,7 @@ public class Missile : MonoBehaviour
     public GameManager gm;
     public GameObject obj;
     public float lifeTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +30,7 @@ public class Missile : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+
         gm.incrementDeadMissiles();
         Destroy(this.gameObject);
     }
