@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class Missile : MonoBehaviour
 {
-
+    public GameManager gm;
+    public GameObject obj;
     public float lifeTime;
     // Start is called before the first frame update
     void Start()
     {
-        
+        obj = GameObject.Find("GameManager");
+        gm = obj.GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -18,14 +22,14 @@ public class Missile : MonoBehaviour
         lifeTime -= Time.deltaTime;
         if(this.transform.position.y < -10 || lifeTime < 0)
         {
-            Debug.Log("Too low or lived too long");
+            gm.incrementDeadMissiles();
             Destroy(this.gameObject);
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("ploding");
+        gm.incrementDeadMissiles();
         Destroy(this.gameObject);
     }
 }

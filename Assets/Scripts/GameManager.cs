@@ -7,43 +7,165 @@ public class GameManager : MonoBehaviour
     public bool missileSpawnerActive;
     public float missileSpawnPeriod_sec;
     public float missileSpawnRadius;
-    public float missileSpeed;
+    public float missileSpeedBase;
+    public int missilesPerRound;
     public Transform missileSpawnOrigin;
     public Transform target;
     public Missile missilePrefab;
+    public Building buildingPrefab;
+    public TextMesh text;
 
+    private int activeMissileCount;
+    private int currentLevel;
+    private bool isActiveLevel;
+    private int totalMissileCount;
+    private float missileSpeed;
+    private int missilesToNextLevel;
+    private int deadMissiles;
+    private float timer;
+    private bool gameEnd;
+    private int buildingCount;
 
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(missileSpawner());
+        //StartCoroutine(rotateText());
+        activeMissileCount = 0;
+        totalMissileCount = 0; 
+        isActiveLevel = false;
+        currentLevel = 1;
+        timer = 7.0f;
+        deadMissiles = 0;
+        missileSpawnerActive = true;
+        missilesToNextLevel = missilesPerRound * currentLevel;
+        gameEnd = false;
+        buildingCount = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        activeMissileCount = totalMissileCount - deadMissiles;
+        if(totalMissileCount >= missilesToNextLevel && isActiveLevel)
+        {
+            isActiveLevel = false;
+            currentLevel++;
+            timer = 6.0f;
+        }
+
+        RectTransform textRect = text.GetComponent<RectTransform>();
+        textRect.transform.Rotate(Vector3.up, 65.0f * Time.deltaTime);
+
+        if (!isActiveLevel)
+        {
+            deadMissiles = 0;
+            timer -= Time.deltaTime;
+            int time = (int)timer;
+
+            if (gameEnd)
+            {
+                currentLevel = 1;
+                text.text = "Game Over. Level " + currentLevel + " starting in " + time + " seconds";
+            }
+            else
+            {
+                text.text = "Level " + currentLevel + " starting in " + time + " seconds";
+            }
+
+            
+            if(timer <= 0.0f)
+            {
+                isActiveLevel = true;
+                totalMissileCount = 0;
+                missilesToNextLevel = missilesPerRound * currentLevel;
+                missileSpeed = missileSpeedBase * currentLevel;
+                gameEnd = false;
+            }
+        }
+        else
+        {
+            text.text = " ";
+        }
+    
+    }
+
+    public void incrementDeadMissiles()
+    {
+        deadMissiles++;
+    }
+
+    public void gameOver()
+    {
+        buildingCount--;
+        isActiveLevel = false;
+        timer = 6.0f;
+        gameEnd = true;
+        Debug.Log("B count: " + buildingCount);
+        if (buildingCount == 0)
+        {
+            Building b = Instantiate<Building>(buildingPrefab);
+            buildingCount++;
+            target = b.transform;
+        }
+
+    }
+
+    IEnumerator rotateText()
+    {
+        while (true)
+        {
+            RectTransform textRect = text.GetComponent<RectTransform>();
+            transform.Rotate(Vector3.up, 20.0f * Time.deltaTime);
+
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
     }
 
     IEnumerator missileSpawner()
     {
-        while (missileSpawnerActive)
+        while (missileSpawnerActive )
         {
+
             // spawn Missiles
-            Missile m = spawnMissile();
-            if (target != null)
+            if (isActiveLevel)
             {
-                targetMissile(m);
+                Missile m = spawnMissile();
+                activeMissileCount++;
+                totalMissileCount++;
+                if (target != null)
+                {
+                    targetMissile(m);
+                }
             }
+            
             yield return new WaitForSeconds(missileSpawnPeriod_sec);
         }
         yield return null;
     }
+
     void targetMissile(Missile m)
     {
+        /*
         Rigidbody rb = m.GetComponent<Rigidbody>();
+        m.transform.LookAt(target.position);
+        m.transform.Translate(Vector3.forward * missileSpeed * Time.deltaTime);
         rb.velocity = (target.position - m.transform.position).normalized * missileSpeed;
+        Vector3 targetDir = target.position - rb.transform.position;
+        float step = missileSpeed * Time.deltaTime;
+        Vector3 newDir = Vector3.RotateTowards(rb.transform.forward, targetDir, step, 0.0f);
+        rb.transform.rotation = Quaternion.LookRotation(newDir);
+        rb.transform.position = Vector3.MoveTowards(rb.transform.position, rb.position, step);
+        */
+        Rigidbody rb = m.GetComponent<Rigidbody>();
+        Vector3 direction = (target.position - rb.transform.position).normalized;
+        Vector3 vel = direction * missileSpeed;
+
+        Vector3 force = vel - rb.velocity;
+        rb.velocity = force;
+
     }
 
     Missile spawnMissile()

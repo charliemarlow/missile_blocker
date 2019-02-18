@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    public GameObject obj;
+    public GameManager manager;
     // Start is called before the first frame update
     void Start()
     {
-        
+        obj = GameObject.Find("GameManager");
+        manager = obj.GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -25,8 +28,8 @@ public class Building : MonoBehaviour
 
         if (rb != null && attacker != null)
         {
-            Debug.Log("Hit by " + collision.gameObject);
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
+            manager.gameOver();
 
         }
         // handle missile is null
