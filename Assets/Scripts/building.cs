@@ -32,10 +32,6 @@ public class Building : MonoBehaviour
             manager.gameOver(this);
 
         }
-        // handle missile is null
-        // handle collision rigidbody is null
-
-
 
     }
 }

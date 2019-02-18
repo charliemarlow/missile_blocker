@@ -47,7 +47,7 @@ public class Gun : MonoBehaviour
         Vector3 forward = gunBarrel.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(gunBarrel.position, forward, Color.green);
         if (Physics.Raycast(gunBarrel.position, gunBarrel.forward, out hit)){
-            Debug.Log(hit.collider.gameObject.name);
+            Debug.Log("You hit: " + hit.collider.gameObject.name);
             if (hit.collider.gameObject.CompareTag("Missile"))
             {
                 
