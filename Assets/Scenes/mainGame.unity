@@ -143,7 +143,7 @@ MonoBehaviour:
   gunshot: {fileID: 6253460}
   laserLine: {fileID: 6253461}
   bulletSpeed: 10
-  bulletPrefab: {fileID: 8056210690431094829, guid: c4eab107fd374e843bbbe0eb0971bccb,
+  bulletPrefab: {fileID: 7096871896952027453, guid: fe28666ab90aa2a45b380f9a7d996a7a,
     type: 3}
   bulletSpawnOrigin: {fileID: 227352351}
 --- !u!54 &6253459
@@ -603,6 +603,7 @@ MonoBehaviour:
     type: 3}
   text: {fileID: 1024000461}
   boundsCollider: {fileID: 0}
+  spaceship: {fileID: 911884725}
   missileFireNoise: {fileID: 2060333193}
   gameOverSound: {fileID: 1334953403}
   missileExplosion: {fileID: 1622377927}
@@ -4466,6 +4467,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4433883364020248, guid: 465cbb465c9880c45887d824bd1f720b,
     type: 3}
   m_PrefabInstance: {fileID: 541936110}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &911884725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4345287478478394, guid: 805fa5d4d7f98eb43abf27378bf9a5e1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1832729212}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &921125098 stripped
 Transform:
@@ -11978,7 +11985,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16098
+  m_Name: pb_Mesh333600
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2

@@ -596,6 +596,9 @@ MonoBehaviour:
   explosionPrefab: {fileID: 487282751893753167, guid: ade2012ad020ba64ea7a05237118bcca,
     type: 3}
   explosionSound: {fileID: 5992562968077499551}
+  explosionLifetime: 0
+  explosion: {fileID: 487282751893753167, guid: ade2012ad020ba64ea7a05237118bcca,
+    type: 3}
 --- !u!54 &3080928093463461396
 Rigidbody:
   m_ObjectHideFlags: 0

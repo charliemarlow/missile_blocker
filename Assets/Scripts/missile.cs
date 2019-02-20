@@ -8,7 +8,7 @@ public class Missile : MonoBehaviour
 {
     public GameManager gm;
     public GameObject obj;
-    public float lifeTime;
+    public float lifeTime; // missile lifetime
     public ParticleSystem explosionPrefab;
     public AudioSource explosionSound;
 
@@ -16,33 +16,40 @@ public class Missile : MonoBehaviour
     void Start()
     {
 
-        //explosion = GetComponentInChildren<ParticleSystem>();
+        // get a reference to game manager
         obj = GameObject.Find("GameManager");
         gm = obj.GetComponent<GameManager>();
-        Debug.Log(obj + " " + gm) ;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        // decrement missile lifetime
         lifeTime -= Time.deltaTime;
         if(this.transform.position.y < -10 || lifeTime < 0)
         {
+            // destroy out of bound or old missiles
             gm.incrementDeadMissiles();
             Destroy(this.gameObject);
         }
+
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        // create an explosion
         ParticleSystem explosion = Instantiate<ParticleSystem>(explosionPrefab);
-        explosion.transform.position = collision.transform.position;
+        explosion.transform.position = this.transform.position;
+
+        // play explosion noise
         explosionSound.Play();
 
         explosion.Play();
-        Debug.Log("Just collided with " + collision.gameObject.name);
+        // don't play missile explosion sound for the tower, it has its own noise
         if(collision.gameObject.name != "ForestTower_Blue(Clone)") gm.playMissileExplosion();
 
+        // keep track of dead missiles
         gm.incrementDeadMissiles();
         Destroy(this.gameObject);
     }

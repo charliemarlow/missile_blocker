@@ -31,7 +31,8 @@ public class Gun : MonoBehaviour
         bool isLeft = isLeftController();
         float indexTriggerState = getIndexTriggerState(isLeft);
 
-        if(indexTriggerState > .5 && Time.time - lastFire > 1 )
+        // only fire once per half second
+        if(indexTriggerState > .5 && Time.time - lastFire > .5 )
         {
             fire();
             lastFire = Time.time;
@@ -39,65 +40,23 @@ public class Gun : MonoBehaviour
         }
     }
 
-    /*
-     * // Frame update example: Draws a 10 meter long green line from the position for 1 frame.
-    void Update()
-    {
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-        Debug.DrawRay(transform.position, forward, Color.green);
-    }
-     */
-
     void fire()
     {
-
-        
-
-        laserLine.enabled = true;
-        Debug.Log("Pew!");
+        // play gunshot noise
         gunshot.Play();
-        RaycastHit hit;
-        Vector3 forward = bulletSpawnOrigin.TransformDirection(Vector3.forward) * 10;
-        Debug.DrawRay(bulletSpawnOrigin.position, forward, Color.green);
-        if (Physics.Raycast(bulletSpawnOrigin.position, bulletSpawnOrigin.forward, out hit)){
-            Debug.Log("You hit: " + hit.collider.gameObject.name);
-            if (hit.collider.gameObject.CompareTag("Missile"))
-            {
-                Destroy(hit.collider.gameObject);
-            }
 
-        }
-        else
-        {
-            Debug.Log("no hit");
-        }
-        laserLine.enabled = false;
-
+        // create a bullet
         Bullet b = Instantiate(bulletPrefab, bulletSpawnOrigin.position, bulletSpawnOrigin.rotation);
         Debug.Log(b);
         Rigidbody rb = b.GetComponent<Rigidbody>();
+
+        // shoot bullet
         rb.AddForce(gunBarrel.transform.forward * 3000);
         rb.transform.position = bulletSpawnOrigin.position;
         rb.transform.rotation = bulletSpawnOrigin.rotation;
-        
-
-        /*
-        Missile spawnMissile()
-    {
-        //Create a missile
-        Debug.Log("creating misile"
-        );
-        Missile m = Instantiate<Missile>(missilePrefab);
-        if(m == null) Debug.Log("null missile");
-        Vector3 randomRight = Random.Range(-1.0f, 1.0f) * missileSpawnRadius * missileSpawnOrigin.right;
-        Vector3 randomForward = Random.Range(-1.0f, 1.0f) * missileSpawnRadius * missileSpawnOrigin.forward;
-        // assign its position a random offset from the spaceship
-        m.transform.position = missileSpawnOrigin.position + randomRight + randomForward;
-        return m;
-    }
-         */
     } 
 
+    // gets the index trigger state based on the type of controller
     float getIndexTriggerState(bool isLeft)
     {
         float indexTriggerState = 0.0f;
@@ -112,6 +71,7 @@ public class Gun : MonoBehaviour
         return indexTriggerState;
     }
 
+    // returns true if the grabber is the left controller
     bool isLeftController()
     {
         if (grabbableGun.grabbedBy == left)
