@@ -18,6 +18,13 @@ public class Building : MonoBehaviour
     void Update()
     {
         
+        if(this.transform.position.z <= -.8 || this.transform.position.z >= .8 ||
+        this.transform.position.x >= 1.1 || this.transform.position.x <= -1.1 ||
+        this.transform.position.y <= .5){
+            Destroy(this.gameObject);
+            manager.gameOver(this);
+        }
+        
     }
 
     void OnCollisionEnter(Collision collision)

@@ -12,6 +12,10 @@ public class Gun : MonoBehaviour
     public AudioSource gunshot;
     public LineRenderer laserLine;
 
+    public float bulletSpeed;
+    public Bullet bulletPrefab;
+    public Transform bulletSpawnOrigin;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,24 +50,52 @@ public class Gun : MonoBehaviour
 
     void fire()
     {
+
+        
+
         laserLine.enabled = true;
         Debug.Log("Pew!");
         gunshot.Play();
         RaycastHit hit;
-        Vector3 forward = gunBarrel.TransformDirection(Vector3.forward) * 10;
-        Debug.DrawRay(gunBarrel.position, forward, Color.green);
-        if (Physics.Raycast(gunBarrel.position, gunBarrel.forward, out hit)){
+        Vector3 forward = bulletSpawnOrigin.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(bulletSpawnOrigin.position, forward, Color.green);
+        if (Physics.Raycast(bulletSpawnOrigin.position, bulletSpawnOrigin.forward, out hit)){
             Debug.Log("You hit: " + hit.collider.gameObject.name);
             if (hit.collider.gameObject.CompareTag("Missile"))
             {
                 Destroy(hit.collider.gameObject);
             }
+
         }
         else
         {
             Debug.Log("no hit");
         }
         laserLine.enabled = false;
+
+        Bullet b = Instantiate(bulletPrefab, bulletSpawnOrigin.position, bulletSpawnOrigin.rotation);
+        Debug.Log(b);
+        Rigidbody rb = b.GetComponent<Rigidbody>();
+        rb.AddForce(gunBarrel.transform.forward * 3000);
+        rb.transform.position = bulletSpawnOrigin.position;
+        rb.transform.rotation = bulletSpawnOrigin.rotation;
+        
+
+        /*
+        Missile spawnMissile()
+    {
+        //Create a missile
+        Debug.Log("creating misile"
+        );
+        Missile m = Instantiate<Missile>(missilePrefab);
+        if(m == null) Debug.Log("null missile");
+        Vector3 randomRight = Random.Range(-1.0f, 1.0f) * missileSpawnRadius * missileSpawnOrigin.right;
+        Vector3 randomForward = Random.Range(-1.0f, 1.0f) * missileSpawnRadius * missileSpawnOrigin.forward;
+        // assign its position a random offset from the spaceship
+        m.transform.position = missileSpawnOrigin.position + randomRight + randomForward;
+        return m;
+    }
+         */
     } 
 
     float getIndexTriggerState(bool isLeft)

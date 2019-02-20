@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public Transform boundsCollider;
     public AudioSource missileFireNoise;
     public AudioSource gameOverSound;
+    public AudioSource missileExplosion;
 
     private int activeMissileCount;
     private int currentLevel;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
             currentLevel++;
             timer = 6.0f;
         }
+        Debug.Log(isActiveLevel);
 
         RectTransform textRect = text.GetComponent<RectTransform>();
         textRect.transform.Rotate(Vector3.up, 65.0f * Time.deltaTime);
@@ -106,6 +108,10 @@ public class GameManager : MonoBehaviour
     
     }
 
+    public void playMissileExplosion(){
+        missileExplosion.Play();
+    }
+
     public void incrementDeadMissiles()
     {
         deadMissiles++;
@@ -150,11 +156,13 @@ public class GameManager : MonoBehaviour
     {
         while (missileSpawnerActive )
         {
-
+            Debug.Log("Missile spawner active");
             // spawn Missiles
             if (isActiveLevel)
             {
+                Debug.Log("Is active level");
                 Missile m = spawnMissile();
+                Debug.Log(m);
                 missileFireNoise.Play();
                 activeMissileCount++;
                 totalMissileCount++;
@@ -163,7 +171,7 @@ public class GameManager : MonoBehaviour
                     targetMissile(m);
                 }
             }
-            
+            Debug.Log("waiting");
             yield return new WaitForSeconds(missileSpawnPeriod_sec);
         }
         yield return null;
@@ -186,14 +194,21 @@ public class GameManager : MonoBehaviour
         // The step size is equal to speed times frame time.
         float step = missileSpeed * Time.deltaTime;
 
-        Vector3 newDir = Vector3.RotateTowards(m.transform.right, targetDir, step, 0.0f);
+        //Vector3 newDir = Vector3;
+
+        Vector3 newDir = Vector3.RotateTowards(rb.transform.up, targetDir, step, 0.0f);
+        //rb.transform.rotation = Quaternion.LookRotation(newDir);
+        Quaternion q = Quaternion.LookRotation(targetDir);
+        rb.transform.rotation = Quaternion.Lerp(rb.transform.rotation, q, .1f);
+        //rb.transform.rotation = Quaternion.RotateTowards(newDir, q, step);
         // Move our position a step closer to the target.
         //m.transform.rotation = Quaternion.LookRotation(newDir);
         /*
         Vector3 targetDir = target.position - rb.transform.position;
         float step = missileSpeed * Time.deltaTime;
         Vector3 newDir = Vector3.RotateTowards(rb.transform.forward, targetDir, step, 0.0f);
-        rb.transform.rotation = Quaternion.LookRotation(newDir);
+        */
+        /* 
         rb.transform.position = Vector3.MoveTowards(rb.transform.position, rb.position, step);
         
         Rigidbody rb = m.GetComponent<Rigidbody>();
@@ -209,7 +224,10 @@ public class GameManager : MonoBehaviour
     Missile spawnMissile()
     {
         //Create a missile
+        Debug.Log("creating misile"
+        );
         Missile m = Instantiate<Missile>(missilePrefab);
+        if(m == null) Debug.Log("null missile");
         Vector3 randomRight = Random.Range(-1.0f, 1.0f) * missileSpawnRadius * missileSpawnOrigin.right;
         Vector3 randomForward = Random.Range(-1.0f, 1.0f) * missileSpawnRadius * missileSpawnOrigin.forward;
         // assign its position a random offset from the spaceship
